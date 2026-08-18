@@ -1,0 +1,119 @@
+Performance QA Engineer:
+Test Assignment
+Your task is to conduct performance testing for YouTrack. The goal is to assess whether the
+application can handle the target load and determine how close the system operates to its limits
+under that load.
+Test Environment Setup
+You should deploy and test the Server version of the YouTrack application.
+● Installation instructions can be found here:
+https://www.jetbrains.com/youtrack/download/get_youtrack.html?section=server
+● Use version 2026.1.13456
+● A 60-day trial license for 100 users is provided (the license is attached in a separate file)
+● Recommended resources for YouTrack are at least:
+○ 2 CPU cores
+○ 3 GB RAM
+● Use the default application settings
+● The load generator may run either on the same machine as the tested application or on
+a separate machine, depending on your preference and available resources
+If running the application locally is inconvenient for you, please contact us and we will consider
+providing a cloud-based YouTrack instance.
+Test Data Preparation
+Before running the tests, you should populate your YouTrack instance with test data consisting
+of:
+● 1 project
+● 100 users
+● 100,000 issues
+Requirements:
+● Inject the data into an empty tracker via the REST API
+● You may use the default Demo project automatically created during YouTrack installation
+● All users may be added to the Demo project team with default permissions, in the same
+way as on the following page:
+<youtrack_baseurl>/admin/editProject/Demo?tab=team
+● All users could be part of the group Registered Users, and the group Registered Users could
+be able to view and modify the Demo project
+When creating issues, ensure sufficient data variety:
+● Each issue must have a summary
+● Each issue must have a description
+● Issues should be created on behalf of different users
+● Values of other custom fields may remain default
+For authorization, it is strongly recommended to use a permanent token instead of the standard
+login process.
+Once the test data is injected, you may create a database backup so it can be restored before
+rerunning performance tests if needed.
+Test Scenario
+You should develop a test scenario that mimics end-user behavior.
+Assume that during one hour, an average user:
+● Creates or updates 10 issues
+(Updates may include commenting, changing fields, applying commands, adding links –
+your choice)
+● Periodically opens other issues for reading
+● Performs searches
+(Approximately 10 searches per hour and 30 viewed issues; issue selection is up to you.
+A fixed set of 50 or fewer distinct search queries shared across all users is sufficient.)
+Test Requirements
+Your goal is to design and execute performance tests in order to answer the following questions:
+1. Can the tracker withstand a load of 100 concurrent active users under the given
+resource constraints?
+2. What performance headroom exists – how many concurrent users can the system
+handle before performance degradation begins?
+3. Is it possible to identify the application’s breaking point under the selected resource
+constraints, or does something prevent this?
+Assume that a violation of at least one of the following SLOs indicates performance
+degradation:
+● 90th percentile response time for GET /api/sortedIssues ≤ 500 ms
+● 90th percentile response time for GET /api/issue/{id}?fields=... ≤ 500 ms
+● 90th percentile response time for POST /api/issuesGetter?fields=... ≤ 1000
+ms
+● HTTP 500 error rate ≤ 1%
+You should avoid excessive test reruns. If you fail to reach the breaking point after the second or
+third attempt, you may either:
+● Arbitrarily tighten the degradation criteria and draw conclusions based on that, or
+● Explain why the proposed degradation point was not reached
+One or two successful 60-minute runs are sufficient, although shorter tests are also acceptable.
+Final Deliverable: Performance Testing Report
+Provide a report in English covering:
+● Test methodology description
+● Summary of test results
+● Statistics and graphs illustrating your findings
+● A link to the repository containing the implemented test suite
+● Any additional information or attachments that you believe should be included in the
+report
+Technical Requirements
+● Gatling is the preferred load testing tool for our project, but it is not a strict requirement –
+you may use any tool you prefer
+● If you use AI agents to complete the assignment, please save AGENTS.md, CLAUDE.md,
+skills/*.md, or similar files in the repository together with the test suite
+● You are free to use any tools and technologies you are comfortable with for any activities
+that, in your opinion, are required to complete this assignment.
+Links to the YouTrack documentation
+● System Requirements, Installation, and Configuration
+○ https://www.jetbrains.com/help/youtrack/server/youtrack-supported-environments
+.html
+○ https://www.jetbrains.com/help/youtrack/server/youtrack-docker-installation.html
+● Database Backup
+○ https://www.jetbrains.com/help/youtrack/server/back-up-the-database.html
+○ https://www.jetbrains.com/help/youtrack/server/restore-docker-image-installation.
+html#restore-from-database-backup
+● Issues (fields, comments, history)
+○ https://www.jetbrains.com/help/youtrack/server/reporting-an-issue.html
+● Issue Links
+○ https://www.jetbrains.com/help/youtrack/server/link-issues.html
+● Search and Search Syntax
+○ https://www.jetbrains.com/help/youtrack/server/attribute-based-search.html#attrib
+ute-based-search-syntax
+● Users, Groups, Permissions
+(default project teams should be sufficient)
+○ https://www.jetbrains.com/help/youtrack/server/manage-user-groups.html#teams
+● Permanent Tokens
+○ https://www.jetbrains.com/help/youtrack/devportal/authentication-with-permanenttoken.html
+○ https://www.jetbrains.com/help/youtrack/devportal/Manage-Permanent-Token.htm
+l
+● Commands
+(you can manage without them, but they greatly simplify field interactions, adding links,
+and even comments)
+○ https://www.jetbrains.com/help/youtrack/server/apply-commands-to-issues.html#
+apply-command-to-issue
+● REST API
+(for this assignment, browser dev tools and/or a recording proxy from your preferred
+performance testing framework are sufficient, but you can read more here if needed)
+○ https://www.jetbrains.com/help/youtrack/devportal/youtrack-rest-api.html

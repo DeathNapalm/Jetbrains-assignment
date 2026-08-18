@@ -1,0 +1,60 @@
+services:
+  youtrack:
+    image: jetbrains/youtrack:2026.1.13456
+    container_name: youtrack
+    ports:
+      - "8080:8080"
+      - "9090:9090"
+    environment:
+      - JETBRAINS_YOUTRACK_BASE_URL=http://localhost:8080
+    volumes:
+      - youtrack-data:/opt/youtrack/data
+      - youtrack-conf:/opt/youtrack/conf
+      - youtrack-logs:/opt/youtrack/logs
+      - youtrack-backups:/opt/youtrack/backups
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8080/login >/dev/null 2>&1 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 10
+      start_period: 60s
+
+  test-data-setup:
+    image: python:3.12-slim
+    env_file: ./scripts/.env 
+    working_dir: /scripts
+    depends_on:
+      youtrack:
+        condition: service_healthy
+    volumes:
+      - ./scripts:/scripts
+    environment:
+      - YOUTRACK_URL=http://youtrack:8080
+    command: >
+      bash -c "pip install -q -r requirements.txt &&
+               python generate_test_data.py"
+    restart: "no"
+    profiles:
+      - data-generation
+
+  # load-generator:
+  #   image: alpine:3.20
+  #   working_dir: /gatling
+  #   depends_on:
+  #     test-data-setup:
+  #       condition: service_completed_successfully
+  #   volumes:
+  #     - ./gatling:/gatling
+  #   environment:
+  #     - YOUTRACK_URL=http://youtrack:8080
+  #   command: ["sh", "/gatling/run-gatling.sh"]
+  #   restart: "no"
+  #   profiles:
+  #     - load-testing
+
+volumes:
+  youtrack-data:
+  youtrack-conf:
+  youtrack-logs:
+  youtrack-backups:
