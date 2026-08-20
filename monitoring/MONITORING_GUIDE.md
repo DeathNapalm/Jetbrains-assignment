@@ -15,6 +15,7 @@ This starts:
 - **YouTrack** (port 8080) - Your issue tracking system
 - **Prometheus** (port 9090) - Time-series metrics database
 - **cAdvisor** (port 8081) - Docker container metrics collector
+- **JMX Exporter** (port 5556) - JVM/JMX to Prometheus bridge for YouTrack
 - **Grafana** (port 3000) - Visual dashboard with graphs
 
 ### 2. Access the Dashboards
@@ -25,6 +26,7 @@ This starts:
 | Prometheus | http://localhost:9090 | (No login) |
 | Grafana | http://localhost:3000 | admin / admin |
 | cAdvisor | http://localhost:8081 | (No login) |
+| JMX Exporter | http://localhost:5556/metrics | (No login) |
 
 ### 3. View Resource Graphs in Grafana
 
@@ -129,6 +131,9 @@ curl http://localhost:9090/api/v1/targets
 
 # Check prometheus config
 curl http://localhost:9090/api/v1/status/config
+
+# Verify JMX target is up
+curl "http://localhost:9090/api/v1/query?query=up%7Bjob%3D%22youtrack-jmx%22%7D"
 ```
 
 ### cAdvisor not showing data

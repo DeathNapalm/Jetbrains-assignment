@@ -8,6 +8,9 @@ YOUTRACK_TOKEN="${YOUTRACK_TOKEN:-}"
 YOUTRACK_PROJECT="${YOUTRACK_PROJECT:-DEMO}"
 PERF_USERS="${PERF_USERS:-10}"
 PERF_DURATION="${PERF_DURATION:-120}"
+SIMULATION_CLASS="${SIMULATION_CLASS:-youtrack.BrowseIssuesSimulation}"
+PERF_CREATE_RATIO="${PERF_CREATE_RATIO:-30}"
+YOUTRACK_LIST_QUERY="${YOUTRACK_LIST_QUERY:-}"
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
@@ -16,9 +19,12 @@ if [ -z "$YOUTRACK_TOKEN" ] && [ -f "$SCRIPT_DIR/../scripts/.env" ]; then
   YOUTRACK_TOKEN=$(grep YOUTRACK_TOKEN "$SCRIPT_DIR/../scripts/.env" | cut -d= -f2-)
 fi
 
-echo "=== Gatling BrowseIssues ==="
+echo "=== Gatling Simulation ==="
 echo "  Target  : $YOUTRACK_URL  project=$YOUTRACK_PROJECT"
 echo "  Users   : $PERF_USERS   duration=${PERF_DURATION}s"
+echo "  Class   : $SIMULATION_CLASS"
+echo "  Create% : $PERF_CREATE_RATIO"
+echo "  Query   : ${YOUTRACK_LIST_QUERY:-<empty>}"
 echo ""
 
 docker run --rm \
@@ -28,12 +34,14 @@ docker run --rm \
   -e YOUTRACK_PROJECT="$YOUTRACK_PROJECT" \
   -e PERF_USERS="$PERF_USERS" \
   -e PERF_DURATION="$PERF_DURATION" \
+  -e PERF_CREATE_RATIO="$PERF_CREATE_RATIO" \
+  -e YOUTRACK_LIST_QUERY="$YOUTRACK_LIST_QUERY" \
   -e JAVA_OPTS="-Dgatling.charting.maxPlotPerSeries=1000" \
   -v "$SCRIPT_DIR/src/test/scala:/opt/gatling/user-files/simulations" \
   -v "$SCRIPT_DIR/data:/opt/gatling/user-files/resources" \
   -v "$SCRIPT_DIR/results:/opt/gatling/results" \
   denvazh/gatling:3.9.5 \
-  -s youtrack.BrowseIssuesSimulation
+  -s "$SIMULATION_CLASS"
 
 echo ""
 echo "Results saved to: $SCRIPT_DIR/results"

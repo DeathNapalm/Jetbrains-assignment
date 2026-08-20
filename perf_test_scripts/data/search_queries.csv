@@ -1,0 +1,21 @@
+query
+project: DEMO
+project: DEMO #Unresolved
+project: DEMO updated: Today
+project: DEMO has: comments
+project: DEMO summary: issue
+project: DEMO summary: dashboard
+project: DEMO summary: search
+project: DEMO description: workflow
+project: DEMO description: integration
+project: DEMO description: notification
+project: DEMO created: Last week
+project: DEMO updated: Last month
+project: DEMO reporter: user001
+project: DEMO reporter: user010
+project: DEMO State: Open
+project: DEMO sort by: updated desc
+project: DEMO sort by: created desc
+project: DEMO #Resolved
+project: DEMO for: me
+project: DEMO has: -comments

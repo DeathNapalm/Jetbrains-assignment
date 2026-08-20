@@ -1,0 +1,9 @@
+startDelaySeconds: 0
+hostPort: youtrack:39010
+ssl: false
+lowercaseOutputName: true
+lowercaseOutputLabelNames: true
+
+# Keep rules broad for test assignment visibility; can be tightened later.
+rules:
+  - pattern: '.*'

@@ -10,6 +10,7 @@ services:
     volumes:
       - youtrack-data:/opt/youtrack/data
       - youtrack-conf:/opt/youtrack/conf
+      - ./youtrack/youtrack.jvmoptions:/opt/youtrack/conf/youtrack.jvmoptions:ro
       - youtrack-logs:/opt/youtrack/logs
       - youtrack-backups:/opt/youtrack/backups
     restart: unless-stopped

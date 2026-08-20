@@ -6,6 +6,7 @@
 # Grafana:    http://localhost:3000  (admin / admin)
 # Prometheus: http://localhost:9091
 # cAdvisor:   http://localhost:8081
+# JMX Export: http://localhost:5556/metrics
 
 services:
   cadvisor:
@@ -41,9 +42,23 @@ services:
       - '--web.enable-lifecycle'
     depends_on:
       - cadvisor
+      - jmx-exporter
     restart: unless-stopped
     networks:
       - monitoring
+
+  jmx-exporter:
+    image: bitnami/jmx-exporter:latest
+    container_name: jmx-exporter
+    ports:
+      - "5556:5556"
+    volumes:
+      - ./jmx-exporter-config.yml:/opt/bitnami/jmx-exporter/config.yml:ro
+    command: ["5556", "/opt/bitnami/jmx-exporter/config.yml"]
+    restart: unless-stopped
+    networks:
+      - monitoring
+      - youtrack_net
 
   grafana:
     image: grafana/grafana:latest
@@ -54,11 +69,12 @@ services:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=admin
       - GF_USERS_ALLOW_SIGN_UP=false
-      - GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH=/etc/grafana/provisioning/dashboards/youtrack-resource-monitoring.json
+      - GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH=/etc/grafana/provisioning/dashboards/youtrack-jmx-monitoring.json
     volumes:
       - ./prometheus-datasource.yml:/etc/grafana/provisioning/datasources/prometheus.yml:ro
       - ./grafana-dashboards.yml:/etc/grafana/provisioning/dashboards/dashboards.yml:ro
       - ./dashboard.json:/etc/grafana/provisioning/dashboards/youtrack-resource-monitoring.json:ro
+      - ./dashboard-jmx.json:/etc/grafana/provisioning/dashboards/youtrack-jmx-monitoring.json:ro
       - grafana-data:/var/lib/grafana
     depends_on:
       - prometheus
@@ -74,5 +90,6 @@ networks:
   monitoring:
     name: monitoring
     driver: bridge
-    # Attach to the same network as YouTrack so Prometheus can scrape it
-    # If YouTrack uses a named network, set `external: true` and use that name instead
+  youtrack_net:
+    external: true
+    name: jb-try1_default

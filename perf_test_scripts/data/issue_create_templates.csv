@@ -1,0 +1,7 @@
+summaryTemplate,descriptionTemplate
+User cannot save draft,Observed while editing issue details in a busy project board
+Search filter returns stale results,Results did not include recently updated items under load
+Notification is delayed,Email and in-app notifications arrived later than expected
+Bulk update takes too long,Applying command to multiple issues showed visible delay
+Issue links are inconsistent,Linked issues panel did not refresh after relation change
+Dashboard widget fails to refresh,Widget content stayed outdated during active updates
