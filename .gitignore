@@ -2,3 +2,6 @@
 perf_test_scripts/results/
 flake.lock
 .~lock.load_profile.xlsx#
+flake.nix
+license.txt
+__pycache__/

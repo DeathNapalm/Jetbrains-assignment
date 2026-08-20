@@ -99,18 +99,18 @@ docker compose -f monitoring/docker-compose-monitoring.yml ps
 # How to run tests 
 ```bash
 # Run all three workload groups together in parallel for 10 minutes.
-# UC01: create/update mix, 30% create / 70% update, 1000 users.
-PERF_USERS=1000 PERF_CREATE_RATIO=30 PERF_DURATION=600 \
+# UC01: create/update mix, 30% create / 70% update, 1000 rpm.
+PERF_USERS=3 PERF_CREATE_RATIO=30 PERF_DURATION=600 \
   SIMULATION_CLASS=youtrack.UC01_createOrUpdate ./perf_test_scripts/run.sh &
 UC01_PID=$!
 
-# UC02: search workload, 1000 users.
-PERF_USERS=1000 PERF_DURATION=600 \
+# UC02: search workload, 1000 rpm.
+PERF_USERS=3 PERF_DURATION=600 \
   SIMULATION_CLASS=youtrack.UC02_performSearches ./perf_test_scripts/run.sh &
 UC02_PID=$!
 
-# UC03: random issue view workload, 3000 users.
-PERF_USERS=3000 PERF_DURATION=600 \
+# UC03: random issue view workload, 3000 rpm.
+PERF_USERS=2 PERF_DURATION=600 \
   SIMULATION_CLASS=youtrack.UC03_viewIssue ./perf_test_scripts/run.sh &
 UC03_PID=$!
 

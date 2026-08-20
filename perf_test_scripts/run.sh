@@ -16,7 +16,12 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 # Load token from .env if not set
 if [ -z "$YOUTRACK_TOKEN" ] && [ -f "$SCRIPT_DIR/../scripts/.env" ]; then
-  YOUTRACK_TOKEN=$(grep YOUTRACK_TOKEN "$SCRIPT_DIR/../scripts/.env" | cut -d= -f2-)
+  YOUTRACK_TOKEN=$(grep '^YOUTRACK_TOKEN=' "$SCRIPT_DIR/../scripts/.env" | cut -d= -f2- | tr -d '\r')
+fi
+
+if [ -z "$YOUTRACK_TOKEN" ]; then
+  echo "ERROR: YOUTRACK_TOKEN is empty. Export it in the shell or set it in scripts/.env." >&2
+  exit 1
 fi
 
 echo "=== Gatling Simulation ==="

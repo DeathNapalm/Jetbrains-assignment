@@ -18,6 +18,8 @@ services:
     volumes:
       - /:/rootfs:ro
       - /var/run:/var/run:rw
+      - ${XDG_RUNTIME_DIR:-/run/user/1000}/docker.sock:/var/run/docker.sock:ro
+      - ${XDG_RUNTIME_DIR:-/run/user/1000}/docker/containerd/containerd.sock:/run/containerd/containerd.sock:ro
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
       - /dev/disk/:/dev/disk:ro

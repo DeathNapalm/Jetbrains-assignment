@@ -45,6 +45,7 @@
             echo "  - docker"
             echo "  - docker-compose"
             echo "  - k6"
+            echo "  - jq"
           '';
         };
       }

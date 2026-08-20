@@ -60,7 +60,7 @@
       },
       "targets": [
         {
-          "expr": "sum(rate(container_cpu_usage_seconds_total{container_label_com_docker_compose_service=\"youtrack\"}[1m]))",
+          "expr": "sum(rate(container_cpu_usage_seconds_total{name=\"youtrack\"}[1m]))",
           "refId": "A",
           "legendFormat": "CPU Usage"
         }
@@ -98,7 +98,7 @@
       },
       "targets": [
         {
-          "expr": "container_memory_working_set_bytes{container_label_com_docker_compose_service=\"youtrack\"}",
+          "expr": "container_memory_working_set_bytes{name=\"youtrack\"}",
           "refId": "A",
           "legendFormat": "Memory (WSS)"
         }
@@ -138,7 +138,7 @@
       },
       "targets": [
         {
-          "expr": "container_memory_working_set_bytes{container_label_com_docker_compose_service=\"youtrack\"} / container_spec_memory_limit_bytes{container_label_com_docker_compose_service=\"youtrack\"}",
+          "expr": "container_memory_working_set_bytes{name=\"youtrack\"} / container_spec_memory_limit_bytes{name=\"youtrack\"}",
           "refId": "A",
           "legendFormat": "Memory / Limit"
         }
@@ -176,7 +176,7 @@
       },
       "targets": [
         {
-          "expr": "sum(rate(container_network_receive_bytes_total{container_label_com_docker_compose_service=\"youtrack\"}[1m]) + rate(container_network_transmit_bytes_total{container_label_com_docker_compose_service=\"youtrack\"}[1m]))",
+          "expr": "sum(rate(container_network_receive_bytes_total{name=\"youtrack\"}[1m]) + rate(container_network_transmit_bytes_total{name=\"youtrack\"}[1m]))",
           "refId": "A",
           "legendFormat": "Network Total"
         }
@@ -214,7 +214,7 @@
       },
       "targets": [
         {
-          "expr": "sum(rate(container_fs_reads_bytes_total{container_label_com_docker_compose_service=\"youtrack\"}[1m]) + rate(container_fs_writes_bytes_total{container_label_com_docker_compose_service=\"youtrack\"}[1m]))",
+          "expr": "sum(rate(container_fs_reads_bytes_total{name=\"youtrack\"}[1m]) + rate(container_fs_writes_bytes_total{name=\"youtrack\"}[1m]))",
           "refId": "A",
           "legendFormat": "Disk I/O"
         }
@@ -250,7 +250,7 @@
       },
       "targets": [
         {
-          "expr": "time() - container_start_time_seconds{container_label_com_docker_compose_service=\"youtrack\"}",
+          "expr": "time() - container_start_time_seconds{name=\"youtrack\"}",
           "refId": "A",
           "legendFormat": "Uptime"
         }
@@ -303,12 +303,12 @@
       },
       "targets": [
         {
-          "expr": "sum(rate(container_cpu_usage_seconds_total{container_label_com_docker_compose_service=\"youtrack\"}[30s]))",
+          "expr": "sum(rate(container_cpu_usage_seconds_total{name=\"youtrack\"}[30s]))",
           "refId": "A",
           "legendFormat": "CPU Total"
         },
         {
-          "expr": "sum(rate(container_cpu_usage_seconds_total{container_label_com_docker_compose_service=\"youtrack\", cpu=\"total\"}[30s]))",
+          "expr": "sum(rate(container_cpu_usage_seconds_total{name=\"youtrack\", cpu=\"total\"}[30s]))",
           "refId": "B",
           "legendFormat": "CPU (kernel mode)",
           "hide": true
@@ -362,22 +362,22 @@
       },
       "targets": [
         {
-          "expr": "container_memory_working_set_bytes{container_label_com_docker_compose_service=\"youtrack\"}",
+          "expr": "container_memory_working_set_bytes{name=\"youtrack\"}",
           "refId": "A",
           "legendFormat": "Working Set (active)"
         },
         {
-          "expr": "container_memory_usage_bytes{container_label_com_docker_compose_service=\"youtrack\"}",
+          "expr": "container_memory_usage_bytes{name=\"youtrack\"}",
           "refId": "B",
           "legendFormat": "RSS + Cache"
         },
         {
-          "expr": "container_memory_cache{container_label_com_docker_compose_service=\"youtrack\"}",
+          "expr": "container_memory_cache{name=\"youtrack\"}",
           "refId": "C",
           "legendFormat": "Page Cache"
         },
         {
-          "expr": "container_spec_memory_limit_bytes{container_label_com_docker_compose_service=\"youtrack\"}",
+          "expr": "container_spec_memory_limit_bytes{name=\"youtrack\"}",
           "refId": "D",
           "legendFormat": "Memory Limit"
         }
@@ -414,7 +414,7 @@
       },
       "targets": [
         {
-          "expr": "container_memory_working_set_bytes{container_label_com_docker_compose_service=\"youtrack\"} / container_spec_memory_limit_bytes{container_label_com_docker_compose_service=\"youtrack\"}",
+          "expr": "container_memory_working_set_bytes{name=\"youtrack\"} / container_spec_memory_limit_bytes{name=\"youtrack\"}",
           "refId": "A",
           "legendFormat": "Memory Utilization"
         }
@@ -464,12 +464,12 @@
       },
       "targets": [
         {
-          "expr": "rate(container_network_receive_bytes_total{container_label_com_docker_compose_service=\"youtrack\"}[30s])",
+          "expr": "rate(container_network_receive_bytes_total{name=\"youtrack\"}[30s])",
           "refId": "A",
           "legendFormat": "RX (inbound)"
         },
         {
-          "expr": "rate(container_network_transmit_bytes_total{container_label_com_docker_compose_service=\"youtrack\"}[30s])",
+          "expr": "rate(container_network_transmit_bytes_total{name=\"youtrack\"}[30s])",
           "refId": "B",
           "legendFormat": "TX (outbound)"
         }
@@ -502,17 +502,17 @@
       },
       "targets": [
         {
-          "expr": "rate(container_network_receive_packets_total{container_label_com_docker_compose_service=\"youtrack\"}[30s])",
+          "expr": "rate(container_network_receive_packets_total{name=\"youtrack\"}[30s])",
           "refId": "A",
           "legendFormat": "Packets RX"
         },
         {
-          "expr": "rate(container_network_transmit_packets_total{container_label_com_docker_compose_service=\"youtrack\"}[30s])",
+          "expr": "rate(container_network_transmit_packets_total{name=\"youtrack\"}[30s])",
           "refId": "B",
           "legendFormat": "Packets TX"
         },
         {
-          "expr": "rate(container_network_receive_packets_dropped_total{container_label_com_docker_compose_service=\"youtrack\"}[30s])",
+          "expr": "rate(container_network_receive_packets_dropped_total{name=\"youtrack\"}[30s])",
           "refId": "C",
           "legendFormat": "Dropped RX"
         }
@@ -560,12 +560,12 @@
       },
       "targets": [
         {
-          "expr": "sum(rate(container_fs_reads_bytes_total{container_label_com_docker_compose_service=\"youtrack\"}[30s]))",
+          "expr": "sum(rate(container_fs_reads_bytes_total{name=\"youtrack\"}[30s]))",
           "refId": "A",
           "legendFormat": "Reads"
         },
         {
-          "expr": "sum(rate(container_fs_writes_bytes_total{container_label_com_docker_compose_service=\"youtrack\"}[30s]))",
+          "expr": "sum(rate(container_fs_writes_bytes_total{name=\"youtrack\"}[30s]))",
           "refId": "B",
           "legendFormat": "Writes"
         }
@@ -597,12 +597,12 @@
       },
       "targets": [
         {
-          "expr": "sum(rate(container_fs_reads_total{container_label_com_docker_compose_service=\"youtrack\"}[30s]))",
+          "expr": "sum(rate(container_fs_reads_total{name=\"youtrack\"}[30s]))",
           "refId": "A",
           "legendFormat": "Read IOPS"
         },
         {
-          "expr": "sum(rate(container_fs_writes_total{container_label_com_docker_compose_service=\"youtrack\"}[30s]))",
+          "expr": "sum(rate(container_fs_writes_total{name=\"youtrack\"}[30s]))",
           "refId": "B",
           "legendFormat": "Write IOPS"
         }
@@ -622,4 +622,331 @@
   "title": "YouTrack Resource Monitoring",
   "uid": "youtrack-resource-monitoring",
   "version": 1
+}
+
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "tooltip": false,
+              "viz": false,
+              "legend": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "id": 2,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "expr": "rate(container_cpu_usage_seconds_total{container_label_com_docker_compose_service=\"youtrack\"}[30s])",
+          "refId": "A",
+          "legendFormat": "YouTrack CPU Usage"
+        }
+      ],
+      "title": "YouTrack CPU Usage Over Time",
+      "type": "timeseries"
+    },
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "tooltip": false,
+              "viz": false,
+              "legend": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "bytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 0
+      },
+      "id": 3,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "expr": "container_memory_usage_bytes{container_label_com_docker_compose_service=\"youtrack\"}",
+          "refId": "A",
+          "legendFormat": "YouTrack Memory Usage"
+        }
+      ],
+      "title": "YouTrack Memory Usage Over Time",
+      "type": "timeseries"
+    },
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "tooltip": false,
+              "viz": false,
+              "legend": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "Bps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 8
+      },
+      "id": 4,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "expr": "rate(container_network_receive_bytes_total{container_label_com_docker_compose_service=\"youtrack\"}[30s])",
+          "refId": "A",
+          "legendFormat": "Network RX"
+        },
+        {
+          "expr": "rate(container_network_transmit_bytes_total{container_label_com_docker_compose_service=\"youtrack\"}[30s])",
+          "refId": "B",
+          "legendFormat": "Network TX"
+        }
+      ],
+      "title": "YouTrack Network I/O Over Time",
+      "type": "timeseries"
+    },
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "tooltip": false,
+              "viz": false,
+              "legend": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "Bps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 8
+      },
+      "id": 5,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "expr": "rate(container_fs_io_current{container_label_com_docker_compose_service=\"youtrack\"}[30s])",
+          "refId": "A",
+          "legendFormat": "Disk I/O"
+        }
+      ],
+      "title": "YouTrack Disk I/O Over Time",
+      "type": "timeseries"
+    }
+  ],
+  "schemaVersion": 27,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "YouTrack Resource Consumption Under Load",
+  "uid": "youtrack-load-test",
+  "version": 0
 }
