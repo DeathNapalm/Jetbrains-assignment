@@ -151,7 +151,7 @@ class UC01_createOrUpdate extends Simulation {
           exec(openIssueAction).exec(updateIssueAction)
         }
       )
-      .pace(3750.millis, 4250.millis)
+      .pace(8000.millis, 9000.millis)
   }
 
   val scn = scenario("Browse And Write")

@@ -7,3 +7,5 @@
 -Dcom.sun.management.jmxremote.ssl=false
 -Dcom.sun.management.jmxremote.local.only=false
 -Djava.rmi.server.hostname=youtrack
+-Xms768m
+-Xmx2048m

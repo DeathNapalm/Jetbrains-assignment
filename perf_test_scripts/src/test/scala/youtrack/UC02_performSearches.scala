@@ -44,7 +44,7 @@ class UC02_performSearches extends Simulation {
   val scriptFlow = group("Script: Search") {
     feed(userFeeder)
       .exec(searchAction)
-      .pace(1750.millis, 2250.millis)
+      .pace(9000.millis, 11000.millis)
   }
 
   val scn = scenario("Search Issues")
