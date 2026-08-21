@@ -7,7 +7,6 @@ This document defines the first-pass methodology for evaluating the performance 
 This methodology follows standard performance-testing practices:
 
 - establish the target system and workload model,
-- validate a stable baseline,
 - run controlled load and stress scenarios,
 - measure the relevant system and API-level metrics,
 - compare results against objective SLOs,
@@ -50,7 +49,13 @@ The performance scenario is modeled from the assignment and represents average e
 - Execute about 10 searches per hour
 - Mix read and write operations across the same issue set in a realistic way
 
-This workload should be applied across a concurrency model that targets the required active-user load, with the primary scenario centered on 100 concurrent active users. The workload should not be limited to a single API call pattern; it must reflect realistic user flows, including issue list loading, issue detail retrieval, and issue modification flows.
+For test implementation, this methodology expresses the workload primarily as request volume and arrival rate, not as a raw count of virtual users. The reason is that the assignment defines business activity per hour, while the load generator must enforce a repeatable stream of operations across issue reads, searches, and updates. In practical terms, requests per minute (RPM) provides a stable control variable for that stream, whereas a fixed number of users only describes how many sessions may be active at once and does not by itself guarantee the intended amount of work.
+
+This distinction matters because concurrency and throughput are related but not interchangeable. By Little's Law, average concurrency depends on throughput and response time. If response times slow down, a closed workload driven only by a fixed user count naturally starts fewer iterations per unit time, which can reduce observed throughput and understate the actual pressure on the system. Current load-testing guidance for tools such as Gatling and k6 therefore distinguishes between closed models based on concurrent users and open models based on arrival rate. For this assignment, RPM is used to preserve the target operational mix even when latency changes during the run.
+
+The implemented workload still maps back to the assignment target of 100 active users; RPM is simply the more precise execution metric. The active-user assumption is used to derive the hourly operation mix, and that mix is then converted into scenario-level RPM/TPH targets for the load generator. The implemented workload model, including the calculated ratios for create/update, search, and view flows, is documented in `load_profile.xlsx` and in the accompanying load-profile screenshot used with this draft.
+
+This workload should therefore be applied with a throughput-controlled model that targets the required business activity while remaining consistent with the 100-active-user requirement. The workload should not be limited to a single API call pattern; it must reflect realistic user flows, including issue list loading, issue detail retrieval, and issue modification flows.
 
 ## 3. Performance objectives
 
@@ -64,24 +69,16 @@ The assignment also defines the degradation signal: at least one SLO violation i
 
 ## 4. Test types to execute
 
-### 4.1 Baseline validation
-
-Purpose: confirm the system is healthy and stable before applying load.
-
-- Run with a small number of virtual users (for example 1–10), or no production-like concurrency
-- Observe API responsiveness and confirm no obvious errors or configuration problems
-- Verify that the target endpoints and authorization flow are functional
-- Capture initial CPU, memory, and request latency baselines
-
-### 4.2 Load test at target concurrency
+### 4.1 Load test at target concurrency
 
 Purpose: evaluate the system at the assignment target of 100 concurrent active users.
 
 - Use a realistic end-user mix of reads, writes, and searches
+- Drive the implemented scenario by the derived RPM profile so the intended hourly business activity remains stable during the run
 - Maintain a fixed workload over a controlled steady-state window
 - Monitor whether the system remains within SLO thresholds for the full run
 
-### 4.3 Headroom / saturation test
+### 4.2 Headroom / saturation test (optional)
 
 Purpose: identify the point at which the system begins to degrade.
 
@@ -89,7 +86,7 @@ Purpose: identify the point at which the system begins to degrade.
 - Track p90 latency, throughput, error rate, and resource saturation
 - Define the headroom as the highest load level before the first sustained SLO breach
 
-### 4.4 Stress test
+### 4.3 Stress test (optional)
 
 Purpose: push the system beyond the stable operating zone to measure breaking behavior.
 
@@ -97,7 +94,7 @@ Purpose: push the system beyond the stable operating zone to measure breaking be
 - Evaluate whether the system fails gracefully or exhibits runaway latency, elevated error rate, or resource exhaustion
 - Record whether the platform reaches a plateau, degrades, or becomes unavailable
 
-### 4.5 Soak / endurance test (recommended)
+### 4.4 Soak / endurance test (recommended)
 
 Purpose: surface slow leaks, memory accumulation, thread exhaustion, or background processing issues.
 
@@ -128,13 +125,15 @@ Each performance run should include the following phases:
 
 ### 5.2 Recommended load profile
 
-| Scenario | Concurrent users | Duration | Purpose |
-| --- | ---: | ---: | --- |
-| Baseline | 1-10 | 5-10 min | Functional validation and calibration |
-| Target load | 100 | 15-60 min | Check compliance with assignment SLOs |
-| Headroom | 120, 150, 200, ... | 10-15 min per step | Find degradation onset |
-| Stress | above headroom | 10-30 min | Estimate breaking point |
-| Soak | moderate sustained load | 30-60 min | Detect degradation over time |
+The following load profile was calculated to comply with the workload requirements defined in Section 2.4.
+
+| Use case | Desired TPH | Users | Pacing, s | Action | Ratio | Calculated RPM | Calculated TPH |
+| --- | ---: | ---: | ---: | --- | ---: | ---: | ---: |
+| UC01_createOrUpdate | 1000 | 3 | 8.5 | Create | 0.3 | 6.35 | 381.18 |
+| UC01_createOrUpdate | 1000 | 3 | 8.5 | Update | 0.7 | 14.82 | 889.41 |
+| UC02_performSearches | 1000 | 3 | 10 | N/A | N/A | 18.00 | 1,080.00 |
+| UC03_viewIssue | 3000 | 2 | 2.4 | N/A | N/A | 50.00 | 3,000.00 |
+
 
 The load schedule should be documented in a way that allows repeatability. The same mix of issue reading, issue creation/update, and searching should be used for each scenario.
 
@@ -145,7 +144,7 @@ The framework should collect both application-layer and infrastructure-layer met
 ### 6.1 API and user-facing metrics
 
 - Response time per endpoint
-- p50, p90, p95 response time
+- p50, p90, average response time
 - Request throughput (requests per second)
 - Success/error rate by endpoint and overall
 - Concurrent virtual users and active requests
@@ -201,12 +200,11 @@ These SLOs should be treated as the primary pass/fail threshold for the target w
 2. Inject the required data set: 1 project, 100 users, and 100,000 issues.
 3. Verify default access and permissions for all users.
 4. Configure the load generator with the intended user model and concurrency profile.
-5. Run a baseline test to validate instrumented endpoints and authentication.
-6. Execute the target-load scenario at 100 concurrent active users.
-7. Run headroom tests at increasing concurrency levels until the system approaches or exceeds the performance limits.
-8. If needed, run a stress or soak test to confirm the breaking point or the absence of a clear break condition.
-9. Capture all metrics in a structured format for later reporting.
-10. Repeat any run only when the initial results are inconclusive or the environment is clearly unstable.
+5. Execute the target-load scenario at 100 concurrent active users.
+6. Run headroom tests at increasing concurrency levels until the system approaches or exceeds the performance limits.
+7. If needed, run a stress or soak test to confirm the breaking point or the absence of a clear break condition.
+8. Capture all metrics in a structured format for later reporting.
+9. Repeat any run only when the initial results are inconclusive or the environment is clearly unstable.
 
 ## 9. Data collection and analysis method
 
@@ -250,7 +248,6 @@ The first pass should prioritize clarity over breadth. A practical initial matri
 
 | Test | Users | Duration | Expected purpose |
 | --- | ---: | ---: | --- |
-| Baseline | 10 | 10 min | Confirm readiness |
 | Target load | 100 | 20-30 min | Validate assignment SLOs |
 | Headroom 1 | 150 | 15 min | Look for early degradation |
 | Headroom 2 | 200 | 15 min | Quantify saturation region |
@@ -268,7 +265,7 @@ This provides a strong first iteration while keeping the total execution time ma
 
 ## 13. Summary
 
-This draft methodology creates a repeatable, evidence-driven way to evaluate the performance of the YouTrack Server under realistic load. It combines a target-user workload model, endpoint-level SLO checks, resource instrumentation, and a staged execution plan that moves from baseline validation to load, headroom, and stress testing. The result is a methodology suitable for a first performance-testing report and a good foundation for deeper tuning or follow-up benchmarking.
+This draft methodology creates a repeatable, evidence-driven way to evaluate the performance of the YouTrack Server under realistic load. It combines a target-user workload model, endpoint-level SLO checks, resource instrumentation, and a staged execution plan that moves through load, headroom, and stress testing. The result is a methodology suitable for a first performance-testing report and a good foundation for deeper tuning or follow-up benchmarking.
 
 ## 14. Reference patterns used in this draft
 

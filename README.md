@@ -98,6 +98,8 @@ docker compose -f monitoring/docker-compose-monitoring.yml ps
 
 # How to run tests 
 ```bash
+# renew the token 
+YOUTRACK_TOKEN=<token>
 # Run all three workload groups together in parallel for 10 minutes.
 # UC01: create/update mix, 30% create / 70% update, 1000 rpm.
 PERF_USERS=3 PERF_CREATE_RATIO=30 PERF_DURATION=600 \
