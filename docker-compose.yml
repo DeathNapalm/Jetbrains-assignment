@@ -2,6 +2,9 @@ services:
   youtrack:
     image: jetbrains/youtrack:2026.1.13456
     container_name: youtrack
+    cpus: "2.0"
+    mem_limit: 3g
+    mem_reservation: 2g
     ports:
       - "8080:8080"
       - "9090:9090"
@@ -10,6 +13,7 @@ services:
     volumes:
       - youtrack-data:/opt/youtrack/data
       - youtrack-conf:/opt/youtrack/conf
+      - ./youtrack/youtrack.jvmoptions:/opt/youtrack/conf/youtrack.jvmoptions:ro
       - youtrack-logs:/opt/youtrack/logs
       - youtrack-backups:/opt/youtrack/backups
     restart: unless-stopped

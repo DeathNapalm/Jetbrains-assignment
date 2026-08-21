@@ -1,0 +1,33 @@
+simulation,minute,request_count
+Browse And Write,0,27
+Browse And Write,1,22
+Browse And Write,2,29
+Browse And Write,3,28
+Browse And Write,4,26
+Browse And Write,5,26
+Browse And Write,6,29
+Browse And Write,7,28
+Browse And Write,8,29
+Browse And Write,9,25
+Search,0,20
+Search,1,17
+Search,2,18
+Search,3,18
+Search,4,20
+Search,5,18
+Search,6,18
+Search,7,17
+Search,8,19
+Search,9,17
+Search,10,2
+View Issue,0,46
+View Issue,1,50
+View Issue,2,50
+View Issue,3,49
+View Issue,4,48
+View Issue,5,50
+View Issue,6,50
+View Issue,7,49
+View Issue,8,49
+View Issue,9,49
+View Issue,10,2
