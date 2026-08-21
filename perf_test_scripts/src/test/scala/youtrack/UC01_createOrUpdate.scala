@@ -64,7 +64,7 @@ class UC01_createOrUpdate extends Simulation {
     feed(pageFeeder)
       .exec(
         http("GET issue list")
-          .get("/api/issues")
+          .get("/api/sortedIssues")
           .queryParam("query", s"project: $project")
           .queryParam("fields", "id,idReadable,summary,updated")
           .queryParam("$top", "20")
