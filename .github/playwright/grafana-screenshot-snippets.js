@@ -3,15 +3,28 @@
   These snippets are intended for the run_playwright_code tool where `page` is already available.
 */
 
-const OUTPUT_DIR = '/home/anton/projects/jb-try1/docs';
+const fs = require('fs');
 
-// Parser-derived window used in this run:
-// from=1787264104678, to=1787264164705
-// Replace these values for future runs.
-const TIME_RANGE = {
-  fromMs: '1787264104678',
-  toMs: '1787264164705',
-};
+const OUTPUT_DIR = '/home/anton/projects/jb-try1/docs';
+const TEST_TIME_RANGE_CSV = '/home/anton/projects/jb-try1/perf_test_scripts/results/parsed/test_time_range.csv';
+
+function readParserTimeRange() {
+  const csv = fs.readFileSync(TEST_TIME_RANGE_CSV, 'utf8').trim();
+  const lines = csv.split(/\r?\n/).filter(Boolean);
+
+  if (lines.length < 2) {
+    throw new Error(`Missing parser time range row in ${TEST_TIME_RANGE_CSV}`);
+  }
+
+  const [windowName, fromMs, toMs] = lines[1].split(',');
+  if (!windowName || !fromMs || !toMs) {
+    throw new Error(`Invalid parser time range row in ${TEST_TIME_RANGE_CSV}: ${lines[1]}`);
+  }
+
+  return { fromMs, toMs };
+}
+
+const TIME_RANGE = readParserTimeRange();
 
 const DASHBOARD_URLS = {
   resource: `http://localhost:3000/d/youtrack-resource-monitoring/youtrack-resource-monitoring?orgId=1&from=${TIME_RANGE.fromMs}&to=${TIME_RANGE.toMs}&timezone=browser`,

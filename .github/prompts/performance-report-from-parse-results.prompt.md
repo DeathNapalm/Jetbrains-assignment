@@ -40,6 +40,7 @@ Requirements:
      - Mark each as PASS/FAIL using measured p90 values
    - Aggregated-by-script table
    - Grafana evidence section with embedded images
+   - Do not mention in the report that results, tables, graphs, or time windows are parser-generated or produced by `parse_results.py`
 9. Package final deliverable into `docs/report_<time>/`:
    - Copy `report.md`
    - Copy every image referenced by the report into the same folder
@@ -71,6 +72,7 @@ Execution notes:
 - Keep all reported numbers aligned with parser CSV files.
 - For panel screenshots, prefer deterministic solo-panel capture (panelId-based) to avoid wrong panel crops.
 - Keep report language concise and professional.
+- Keep implementation details out of the report narrative; do not call out `parse_results.py` or say that the results are parser-generated.
 
 Success criteria:
 - A standalone package `docs/report_<time>/` exists.

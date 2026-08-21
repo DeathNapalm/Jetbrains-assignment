@@ -84,6 +84,14 @@ class UC01_createOrUpdate extends Simulation {
     )
   }
 
+    val fetchUpdatedIssueAction = exec(
+      http("GET updated issue - ${randomIssueId}")
+        .get("/api/issues/${randomIssueId}")
+        .queryParam("fields", "id,idReadable,summary,description,updated")
+        .check(status.is(200))
+        .check(jsonPath("$.idReadable").exists)
+    )
+
   val updateIssueAction = group("Action: Update Random Field") {
     feed(updateFieldFeeder)
       .exec { session =>
@@ -114,6 +122,7 @@ class UC01_createOrUpdate extends Simulation {
             .check(status.is(200))
         )
       )
+      .exec(fetchUpdatedIssueAction)
   }
 
   val createIssueAction = group("Action: Create New Issue") {

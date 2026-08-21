@@ -1,0 +1,5 @@
+simulation,request_name,total,success,failed,error_rate,avg_ms,p50_ms,p90_ms,min_ms,max_ms
+Browse And Write,"Script: BrowseAndWrite,Action: Create New Issue",69,69,0,0.00,311.68,229.00,501.20,130.00,1461.00
+Browse And Write,"Script: BrowseAndWrite,Action: List Issues",211,211,0,0.00,1143.21,900.00,1915.00,521.00,6486.00
+Search,"Script: Search,Action: Perform Search",182,182,0,0.00,10.57,4.00,33.90,2.00,67.00
+View Issue,"Script: ViewIssue,Action: List Issues",488,488,0,0.00,996.28,804.50,1645.60,520.00,6336.00
