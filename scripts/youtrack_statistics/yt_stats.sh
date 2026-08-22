@@ -2,7 +2,7 @@
 set -euo pipefail
 
 YOUTRACK_URL="${YOUTRACK_URL:-http://localhost:8080}"
-TOKEN="${YOUTRACK_TOKEN:-$(grep YOUTRACK_TOKEN "$(dirname "$0")/.env" | cut -d= -f2-)}"
+TOKEN="${YOUTRACK_TOKEN:-$(grep YOUTRACK_TOKEN "$(dirname "$0")/../test_data_generation/.env" | cut -d= -f2-)}"
 
 auth=(-H "Authorization: Bearer $TOKEN" -H "Accept: application/json")
 

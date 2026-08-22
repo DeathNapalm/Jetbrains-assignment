@@ -4,9 +4,11 @@
 */
 
 const fs = require('fs');
+const path = require('path');
 
-const OUTPUT_DIR = '/home/anton/projects/jb-try1/docs';
-const TEST_TIME_RANGE_CSV = '/home/anton/projects/jb-try1/perf_test_scripts/results/parsed/test_time_range.csv';
+const REPOSITORY_ROOT = path.resolve(__dirname, '../..');
+const OUTPUT_DIR = path.join(REPOSITORY_ROOT, 'docs');
+const TEST_TIME_RANGE_CSV = path.join(REPOSITORY_ROOT, 'perf_test_scripts', 'results', 'parsed', 'test_time_range.csv');
 
 function readParserTimeRange() {
   const csv = fs.readFileSync(TEST_TIME_RANGE_CSV, 'utf8').trim();

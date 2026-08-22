@@ -59,7 +59,7 @@ This starts:
 
 ```bash
 # While monitoring dashboard is open
-python scripts/generate_test_data.py --num-concurrent-requests 100
+python scripts/test_data_generation/generate_test_data.py --num-concurrent-requests 100
 ```
 
 ### Option 3: Using curl for Simple Load Testing

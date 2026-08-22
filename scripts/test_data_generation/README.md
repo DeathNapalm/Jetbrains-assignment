@@ -55,7 +55,7 @@ The test data generation system creates:
 
 ```bash
 # Install dependencies
-pip install -r scripts/requirements.txt
+pip install -r scripts/test_data_generation/requirements.txt
 ```
 
 ## Configuration
@@ -107,8 +107,8 @@ docker compose run --rm test-data-setup
 ### Manual Execution
 
 ```bash
-# Navigate to scripts directory
-cd scripts
+# Navigate to the test data generation directory
+cd scripts/test_data_generation
 
 # Ensure config is set via environment variables
 export YOUTRACK_URL="http://localhost:8080"
@@ -188,7 +188,7 @@ export BATCH_DELAY_SECONDS="2.0"
 
 Logs are written to:
 - **Console**: Real-time progress and status
-- **File**: `scripts/logs/test_data_generation.log`
+- **File**: `scripts/test_data_generation/logs/test_data_generation.log`
 
 Log levels:
 - `DEBUG`: Detailed per-item operations
@@ -257,8 +257,8 @@ Failed operations:
 - Review server logs for database issues
 
 ### "No module named config" or "No module named youtrack_api"
-- Run from `scripts/` directory: `cd scripts && python generate_test_data.py`
-- Or add to PYTHONPATH: `export PYTHONPATH="${PYTHONPATH}:/path/to/scripts"`
+- Run from the generator directory: `cd scripts/test_data_generation && python generate_test_data.py`
+- Or add it to PYTHONPATH: `export PYTHONPATH="${PYTHONPATH}:/path/to/scripts/test_data_generation"`
 
 ## Testing Locally
 
@@ -266,7 +266,7 @@ Generate smaller dataset for testing:
 ```bash
 export TOTAL_USERS="10"
 export TOTAL_ISSUES="1000"
-python generate_test_data.py
+python scripts/test_data_generation/generate_test_data.py
 ```
 
 ## Integration with Performance Testing
@@ -292,9 +292,9 @@ After test data is generated:
 ## File Structure
 
 ```
-scripts/
+scripts/test_data_generation/
 ├── generate_test_data.py      # Main generation script
-├── config.py                   # Configuration module
+├── config.py                  # Configuration module
 ├── youtrack_api.py            # REST API client
 ├── requirements.txt           # Python dependencies
 ├── README.md                  # This file
@@ -303,8 +303,8 @@ scripts/
 ├── backups/                   # Backup files (created)
 │   └── *.backup
 └── sample_data/               # CSV templates
-    ├── users.csv
-    └── issues.csv
+   ├── users.csv
+   └── issues.csv
 ```
 
 ## Related Documentation
