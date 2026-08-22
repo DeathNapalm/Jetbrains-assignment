@@ -5,8 +5,9 @@ from collections import defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
 
-RESULTS_DIR = Path('/home/anton/projects/jb-try1/perf_test_scripts/results')
-OUTPUT_DIR = Path('/home/anton/projects/jb-try1/perf_test_scripts/results/parsed')
+REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
+RESULTS_DIR = REPOSITORY_ROOT / 'perf_test_scripts' / 'results'
+OUTPUT_DIR = RESULTS_DIR / 'parsed'
 
 SIMULATIONS = [
     {

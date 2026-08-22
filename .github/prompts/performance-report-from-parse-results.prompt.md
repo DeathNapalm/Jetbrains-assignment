@@ -7,17 +7,17 @@ Use this prompt when all 3 performance scripts were run successfully and you nee
 You are working in this repository.
 
 Goal:
-Create a complete performance test report package using parse_results.py outputs and Grafana screenshots. The final deliverable must be a standalone folder `docs/report_<time>/` containing the report, all referenced images, and text artifacts.
+Create a complete performance test report package using `scripts/performance_reporting/parse_results.py` outputs and Grafana screenshots. The final deliverable must be a standalone folder `docs/report_<time>/` containing the report, all referenced images, and text artifacts.
 
 Requirements:
 1. Ensure list/read scenarios measure `GET /api/sortedIssues` for list calls (not `GET /api/issues`) in:
    - `perf_test_scripts/src/test/scala/youtrack/UC01_createOrUpdate.scala`
    - `perf_test_scripts/src/test/scala/youtrack/UC03_viewIssue.scala`
-2. Use `parse_results.py` as the single source for request graph/table artifacts.
-3. If parser time-window files are missing, update `parse_results.py` to produce:
+2. Use `scripts/performance_reporting/parse_results.py` as the single source for request graph/table artifacts.
+3. If parser time-window files are missing, update `scripts/performance_reporting/parse_results.py` to produce:
    - `perf_test_scripts/results/parsed/simulation_time_windows.csv`
    - `perf_test_scripts/results/parsed/test_time_range.csv`
-4. Run `python3 parse_results.py`.
+4. Run `python3 scripts/performance_reporting/parse_results.py`.
 5. Use `test_time_range.csv` (`from_ms`, `to_ms`) as the exact Grafana time window for all screenshots.
 6. Reuse Playwright snippets from `.github/playwright/grafana-screenshot-snippets.js`:
    - `loginGrafana(page, username, password)`
@@ -40,13 +40,13 @@ Requirements:
      - Mark each as PASS/FAIL using measured p90 values
    - Aggregated-by-script table
    - Grafana evidence section with embedded images
-   - Do not mention in the report that results, tables, graphs, or time windows are parser-generated or produced by `parse_results.py`
+   - Do not mention in the report that results, tables, graphs, or time windows are parser-generated or produced by `scripts/performance_reporting/parse_results.py`
 9. Package final deliverable into `docs/report_<time>/`:
    - Copy `report.md`
    - Copy every image referenced by the report into the same folder
    - Copy text artifacts (`latency_summary.csv`, `requests_over_time.csv`, `simulation_time_windows.csv`, `test_time_range.csv`) into the same folder
    - Ensure report links are self-contained and resolvable from `docs/report_<time>/report.md`
-10. Verify `parse_results.py` syntax with `python3 -m py_compile parse_results.py`.
+10. Verify parser syntax with `python3 -m py_compile scripts/performance_reporting/parse_results.py`.
 
 Output and paths:
 - Parser outputs:
@@ -72,10 +72,10 @@ Execution notes:
 - Keep all reported numbers aligned with parser CSV files.
 - For panel screenshots, prefer deterministic solo-panel capture (panelId-based) to avoid wrong panel crops.
 - Keep report language concise and professional.
-- Keep implementation details out of the report narrative; do not call out `parse_results.py` or say that the results are parser-generated.
+- Keep implementation details out of the report narrative; do not call out `scripts/performance_reporting/parse_results.py` or say that the results are parser-generated.
 
 Success criteria:
 - A standalone package `docs/report_<time>/` exists.
 - `report.md` in that folder renders correctly with working links and images.
 - SLO compliance section is present after the response-time table and reflects measured p90 values.
-- `parse_results.py` runs and compiles successfully.
+- `scripts/performance_reporting/parse_results.py` runs and compiles successfully.

@@ -31,14 +31,14 @@ YouTrack will be available at `http://localhost:8080` with JMX metrics on port `
 ### Generate Test Data (Optional)
 ```bash
 # Configure environment with your YouTrack token
-export $(cat scripts/.env | grep -v '#' | xargs)
+export $(cat scripts/test_data_generation/.env | grep -v '#' | xargs)
 
 # Run test data generation
 docker compose --profile data-generation up test-data-setup
 
 # Or use the helper script
-chmod +x scripts/run_generator.sh
-scripts/run_generator.sh
+chmod +x scripts/test_data_generation/run_generator.sh
+scripts/test_data_generation/run_generator.sh
 ```
 
 This will generate ~100,000 test issues and ~100 users in your YouTrack instance.

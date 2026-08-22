@@ -11,11 +11,11 @@
 
 ```bash
 # Copy example environment file
-cp scripts/.env.example .env
+cp scripts/test_data_generation/.env.example scripts/test_data_generation/.env
 
 # Edit .env and set your permanent token
 # You'll need to complete YouTrack setup first and create a token
-nano .env
+nano scripts/test_data_generation/.env
 ```
 
 ### Step 2: Start YouTrack
@@ -35,7 +35,7 @@ docker compose logs -f youtrack
 3. Complete the setup wizard
 4. Go to Admin → Your Profile
 5. Account Security tab → Create new permanent token
-6. Copy the token and add to `.env`: `YOUTRACK_TOKEN=perm:...`
+6. Copy the token and add to `scripts/test_data_generation/.env`: `YOUTRACK_TOKEN=perm:...`
 
 ### Step 4: Generate Test Data
 
@@ -43,7 +43,7 @@ docker compose logs -f youtrack
 
 ```bash
 # Load environment from .env
-export $(cat .env | grep -v '#' | xargs)
+export $(cat scripts/test_data_generation/.env | grep -v '#' | xargs)
 
 # Run data generation service
 docker compose --profile data-generation up test-data-setup
@@ -56,27 +56,26 @@ docker compose logs -f test-data-setup
 
 ```bash
 # Load environment
-export $(cat .env | grep -v '#' | xargs)
+export $(cat scripts/test_data_generation/.env | grep -v '#' | xargs)
 
 # Install dependencies
-pip install -r scripts/requirements.txt
+pip install -r scripts/test_data_generation/requirements.txt
 
 # Run generator
-cd scripts
-python generate_test_data.py
+python scripts/test_data_generation/generate_test_data.py
 ```
 
 #### Option C: Bash Helper Script
 
 ```bash
 # Load environment
-export $(cat .env | grep -v '#' | xargs)
+export $(cat scripts/test_data_generation/.env | grep -v '#' | xargs)
 
 # Make script executable
-chmod +x scripts/run_generator.sh
+chmod +x scripts/test_data_generation/run_generator.sh
 
 # Run
-scripts/run_generator.sh
+scripts/test_data_generation/run_generator.sh
 ```
 
 ### Step 5: Verify Test Data
@@ -188,7 +187,7 @@ Test data generation completed successfully
 ```bash
 # Solution: Create token in YouTrack and set environment variable
 export YOUTRACK_TOKEN="perm:xxx"
-echo "YOUTRACK_TOKEN=$YOUTRACK_TOKEN" >> .env
+echo "YOUTRACK_TOKEN=$YOUTRACK_TOKEN" >> scripts/test_data_generation/.env
 ```
 
 ### "Failed to connect to YouTrack API"
@@ -207,7 +206,7 @@ docker compose logs youtrack
 ```bash
 # Token invalid or expired
 # 1. Generate new token in YouTrack UI
-# 2. Update YOUTRACK_TOKEN in .env
+# 2. Update YOUTRACK_TOKEN in scripts/test_data_generation/.env
 # 3. Re-run script
 ```
 
@@ -245,7 +244,7 @@ docker compose restart test-data-setup
 docker compose logs -f test-data-setup
 
 # Alternative: tail the log file
-tail -f scripts/logs/test_data_generation.log
+tail -f scripts/test_data_generation/logs/test_data_generation.log
 ```
 
 ### Via YouTrack UI
@@ -285,26 +284,25 @@ With default settings (4 workers, 100 issues/batch):
 ## File Organization
 
 ```
-jb-try1/
-├── docker-compose.yml       # Container orchestration
-├── .env.example             # Configuration template
-├── .env                     # Your configuration (add to .gitignore)
+jb-try-2/
+├── docker-compose.yml               # Container orchestration
 ├── scripts/
-│   ├── generate_test_data.py    # Main script
-│   ├── config.py                # Configuration module
-│   ├── youtrack_api.py          # REST API client
-│   ├── backup_utils.py          # Backup utilities
-│   ├── run_generator.sh         # Bash helper
-│   ├── requirements.txt         # Python dependencies
-│   ├── README.md                # Detailed documentation
-│   ├── .env.example             # Example config
-│   ├── logs/                    # Generated logs
-│   ├── backups/                 # Generated backups
-│   └── sample_data/
-│       ├── users.csv            # User templates
-│       └── issues.csv           # Issue templates
-├── gatling/
-│   └── run-gatling.sh           # Load testing script
+│   └── test_data_generation/
+│       ├── generate_test_data.py    # Main script
+│       ├── config.py                # Configuration module
+│       ├── youtrack_api.py          # REST API client
+│       ├── backup_utils.py          # Backup utilities
+│       ├── run_generator.sh         # Bash helper
+│       ├── requirements.txt         # Python dependencies
+│       ├── README.md                # Detailed documentation
+│       ├── .env.example             # Example config
+│       ├── logs/                    # Generated logs
+│       ├── backups/                 # Generated backups
+│       └── sample_data/
+│           ├── users.csv            # User templates
+│           └── issues.csv           # Issue templates
+├── perf_test_scripts/
+│   └── run.sh                       # Load testing script
 └── youtrack/
     ├── data/                    # YouTrack data volume
     ├── conf/                    # Configuration
@@ -349,7 +347,7 @@ After test data is generated:
 
 If you encounter issues:
 
-1. Check logs: `tail -f scripts/logs/test_data_generation.log`
+1. Check logs: `tail -f scripts/test_data_generation/logs/test_data_generation.log`
 2. Review troubleshooting section above
 3. Check YouTrack server logs: `docker compose logs youtrack`
 4. Verify environment variables: `echo $YOUTRACK_TOKEN`
@@ -358,6 +356,6 @@ If you encounter issues:
 ## Support
 
 For issues related to:
-- **Test data generation**: See scripts/README.md
+- **Test data generation**: See `scripts/test_data_generation/README.md`
 - **YouTrack API**: See YouTrack documentation
 - **Docker Compose**: See Docker documentation
